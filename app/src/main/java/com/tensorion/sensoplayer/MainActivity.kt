@@ -15,7 +15,7 @@ import com.tensorion.sensoplayer.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
 
 /**
- *  Full-screen activity with a video player controlled by shaking, rotating, and moving the device
+ *  Full-screen activity with a video player controlled by shaking, rotating and moving the device
  */
 class MainActivity : AppCompatActivity() {
 
