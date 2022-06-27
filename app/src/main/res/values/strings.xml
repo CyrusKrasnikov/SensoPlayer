@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SensoPlayer</string>
+    <string name="media_url_mp4">http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4</string>
+</resources>
