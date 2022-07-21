@@ -4,7 +4,7 @@ import android.hardware.SensorEvent
 import androidx.media3.common.Player
 
 /**
- * Declares function and property
+ * Contract to process sensor events and control video player
  */
 interface ISensorProcessor{
     var player: Player?
