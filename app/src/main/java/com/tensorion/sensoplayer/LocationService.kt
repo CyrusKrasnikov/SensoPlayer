@@ -18,6 +18,7 @@ class LocationService : Service(), LocationListener {
 
     private var location: Location? = null
 
+    var locationChanged: ((Location) -> Unit)? = null
     override fun onLocationChanged(location: Location) {
         if (locationChanged != null)
             locationChanged!!(location)
@@ -25,12 +26,12 @@ class LocationService : Service(), LocationListener {
 
     override fun onProviderDisabled(provider: String) {}
     override fun onProviderEnabled(provider: String) {}
+    @Deprecated("Deprecated in Java")
     override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
     override fun onBind(arg0: Intent): IBinder? {
         return null
     }
 
-    var locationChanged: ((Location) -> Unit)? = null
     @Throws(SecurityException::class)
     fun startLocationUpdates(locationManager: LocationManager) {
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))

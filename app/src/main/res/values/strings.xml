@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">SensoPlayer</string>
     <string name="media_url_mp4">http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4</string>
+    <string name="location_permission_needed">Access to fine location is required for video auto-restart feature</string>
+    <string name="ok">OK</string>
+    <string name="noThanks">No thanks</string>
+    <string name="location_explanation">The location service supports feature to automatically restart the video after moving the device 10 meters</string>
 </resources>
