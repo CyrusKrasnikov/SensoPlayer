@@ -5,12 +5,13 @@ import android.hardware.SensorEvent
 import androidx.media3.common.Player
 import androidx.media3.common.util.Log
 import org.junit.Test
-import org.mockito.kotlin.*
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * Unit tests sensor processor verification
  */
 class SensorUnitTest {
     @Test

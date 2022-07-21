@@ -12,7 +12,7 @@ import androidx.media3.exoplayer.ExoPlayer
  */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    val playerLive = SensorLiveData(SensorProcessor(),
+    val playerLive = SensorLiveData(SensorProcessor(), // TODO decouple using HILT
         getApplication<Application>().getSystemService(Context.SENSOR_SERVICE) as SensorManager)
     /**
      * Initializes a player from url and prepares it

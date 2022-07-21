@@ -18,6 +18,9 @@ class LocationService : Service(), LocationListener {
 
     private var location: Location? = null
 
+    /**
+     * Function to call when location is changed
+     */
     var locationChanged: ((Location) -> Unit)? = null
     override fun onLocationChanged(location: Location) {
         if (locationChanged != null)

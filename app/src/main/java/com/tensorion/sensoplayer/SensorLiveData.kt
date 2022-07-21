@@ -9,8 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.media3.common.Player
 
 /**
- * Combines power of LiveData and SensorManager.
- * May be it would better to create two different classes.
+ * Directs sensor events to processor with player control according to lifecycle.
  *
  * @param buildPlayer called when new player instance is needed
  */

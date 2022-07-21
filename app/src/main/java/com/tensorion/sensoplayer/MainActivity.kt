@@ -1,20 +1,22 @@
 package com.tensorion.sensoplayer
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.*
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
-import androidx.core.view.*
-import androidx.lifecycle.*
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import com.tensorion.sensoplayer.Constants.LAUNCH_VIDEO_DELAY_MS
 import com.tensorion.sensoplayer.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             delay(LAUNCH_VIDEO_DELAY_MS)
             viewBinding.playerView.player?.play()
         }
-        locationService = LocationService()
+        locationService = LocationService() // TODO decouple using HILT
         locationService.locationChanged = {
             Log.d(this.javaClass.name, "onLocationChanged $this")
             viewBinding.playerView.player?.seekTo(0)
@@ -68,29 +70,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Checks location permission and, if it's not granted, launches educational UI or requests it
+     */
     private fun locationAccessGranted(): Boolean {
         when {
-            ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
+                    == PERMISSION_GRANTED -> {
                 return true
             }
-            shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                val intent = Intent(this, LocationAccessRationaleActivity::class.java)
+            shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION) -> {
+                val intent = Intent(this,
+                    LocationAccessRationaleActivity::class.java)
                 startForResult.launch(intent)
             }
             else -> {
-                requestPermissionLauncher.launch(
-                    Manifest.permission.ACCESS_FINE_LOCATION)
+                requestPermissionLauncher.launch( ACCESS_FINE_LOCATION )
             }
         }
         return false
     }
 
+    /**
+     * Starts location updates if permission is granted or shows toast with explanation otherwise
+     */
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
+        ) { isGranted ->
             if (isGranted) {
                 locationService.startLocationUpdates(getSystemService(LOCATION_SERVICE) as LocationManager)
             } else {
@@ -98,10 +105,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) { //val intent = result.data
-            requestPermissionLauncher.launch(
-                Manifest.permission.ACCESS_FINE_LOCATION)
+    /**
+     * Asks user for location access if he clicks OK in educational UI activity
+     */
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
+            }
         }
-    }
 }
